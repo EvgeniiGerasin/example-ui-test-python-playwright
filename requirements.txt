@@ -1,0 +1,4 @@
+playwight
+pytest
+allure-pytest
+ytest-asyncio

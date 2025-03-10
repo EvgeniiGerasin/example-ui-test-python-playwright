@@ -1,0 +1,8 @@
+{
+    "python.testing.pytestArgs": [
+        "automation",
+        "--alluredir=results"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
+}
