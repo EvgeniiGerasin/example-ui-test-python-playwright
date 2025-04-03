@@ -5,16 +5,30 @@ from config.data import Stands
 
 @pytest.fixture(scope="function")
 def page_fixture():
-    # Запускаем Playwright в синхронном режиме
+    # Инициализация Playwright
     with sync_playwright() as playwright:
         # Запускаем браузер
         browser: Browser = playwright.chromium.launch(headless=True)
+        
+        # Создаем контекст с поддержкой трассировки
+        context = browser.new_context()
+
+        # Начинаем запись трассировки
+        context.tracing.start(name="trace", screenshots=True, snapshots=True)
+
         # Создаем новую страницу
-        page: Page = browser.new_page()
+        page: Page = context.new_page()
+
         # Переходим на указанный URL
         page.goto(url=Stands.url)
+
         # Передаем страницу в тест
         yield page
-        # Закрываем страницу и браузер после завершения теста
+
+        # Останавливаем трассировку и сохраняем её в файл
+        context.tracing.stop(path="trace.zip")
+
+        # Закрываем страницу, контекст и браузер
         page.close()
+        context.close()
         browser.close()
